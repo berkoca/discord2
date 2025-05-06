@@ -466,8 +466,7 @@ async function setupVoiceConnections(users) {
                 video: false
             });
             
-            // Add mute functionality
-            muteBtn.addEventListener('click', toggleMute);
+            // We don't add the event listener here anymore - it's in setupUIListeners
         } catch (error) {
             console.error('Error accessing microphone:', error);
             
@@ -667,45 +666,53 @@ function addUserToVoiceList(user, isCurrentUser = false) {
 
 // Toggle mute
 function toggleMute() {
+    console.log('Toggle mute called');
+    
+    // Toggle mute state regardless of stream status
+    isMuted = !isMuted;
+    
+    // Update audio tracks if available
     if (localStream) {
         const audioTracks = localStream.getAudioTracks();
-        if (audioTracks.length > 0) {
-            isMuted = !isMuted;
-            audioTracks[0].enabled = !isMuted;
-            
-            // Update UI
+        audioTracks.forEach(track => {
+            track.enabled = !isMuted;
+            console.log(`Audio track ${track.id} enabled: ${track.enabled}`);
+        });
+    }
+    
+    // Always update UI
+    if (isMuted) {
+        muteBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+        muteBtn.classList.add('muted');
+    } else {
+        muteBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+        muteBtn.classList.remove('muted');
+    }
+    
+    // Update voice user list
+    const currentUserElement = document.querySelector(`[data-user-id="${socket.id}"]`);
+    if (currentUserElement) {
+        const statusElement = currentUserElement.querySelector('.voice-user-status');
+        if (statusElement) {
             if (isMuted) {
-                muteBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-                muteBtn.classList.add('muted');
+                statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                statusElement.classList.add('muted');
             } else {
-                muteBtn.innerHTML = '<i class="fas fa-microphone"></i>';
-                muteBtn.classList.remove('muted');
-            }
-            
-            // Update voice user list
-            const currentUserElement = document.querySelector(`[data-user-id="${socket.id}"]`);
-            if (currentUserElement) {
-                const statusElement = currentUserElement.querySelector('.voice-user-status');
-                if (statusElement) {
-                    if (isMuted) {
-                        statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i>';
-                        statusElement.classList.add('muted');
-                    } else {
-                        statusElement.innerHTML = '<i class="fas fa-microphone"></i>';
-                        statusElement.classList.remove('muted');
-                    }
-                }
-            }
-            
-            // Notify server about mute status change
-            if (userData && userData.room) {
-                socket.emit('voice-status', {
-                    status: isMuted ? 'muted' : 'unmuted',
-                    roomId: userData.room
-                });
+                statusElement.innerHTML = '<i class="fas fa-microphone"></i>';
+                statusElement.classList.remove('muted');
             }
         }
     }
+    
+    // Notify server about mute status change
+    if (socket && socket.connected && userData && userData.room) {
+        socket.emit('voice-status', {
+            status: isMuted ? 'muted' : 'unmuted',
+            roomId: userData.room
+        });
+    }
+    
+    console.log(`Mute status: ${isMuted ? 'Muted' : 'Unmuted'}`);
 }
 
 // Create a dummy stream when microphone access fails

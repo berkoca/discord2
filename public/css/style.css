@@ -422,7 +422,10 @@ ul {
 }
 
 .voice-btn.muted {
-    color: var(--danger-color);
+    color: white;
+    background-color: var(--danger-color);
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(240, 71, 71, 0.5);
 }
 
 .leave-btn {
