@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Clone</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar with channels -->
+        <div class="sidebar">
+            <div class="server-info">
+                <h2>Discord Clone</h2>
+            </div>
+            <div class="channels">
+                <div class="channel-category">
+                    <h3>Text Channels</h3>
+                    <button id="add-text-channel" class="add-channel-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <ul id="text-channels-list" class="channel-list">
+                    <!-- Text channels will be added here dynamically -->
+                </ul>
+                
+                <div class="channel-category">
+                    <h3>Voice Channels</h3>
+                    <button id="add-voice-channel" class="add-channel-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <ul id="voice-channels-list" class="channel-list">
+                    <!-- Voice channels will be added here dynamically -->
+                </ul>
+            </div>
+            <div class="user-info">
+                <div id="current-user" class="user">
+                    <!-- Current user info will be displayed here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main content area -->
+        <div class="content">
+            <!-- Login screen (shown initially) -->
+            <div id="login-screen" class="login-screen">
+                <div class="login-container">
+                    <h2>Welcome to Discord Clone</h2>
+                    <div class="login-form">
+                        <input type="text" id="username-input" placeholder="Enter your username">
+                        <button id="join-btn">Join</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat interface (hidden initially) -->
+            <div id="chat-interface" class="chat-interface hidden">
+                <div class="chat-header">
+                    <h3 id="current-room-name">General</h3>
+                    <div id="room-users-count">0 online</div>
+                </div>
+                
+                <div id="messages-container" class="messages-container">
+                    <!-- Messages will be displayed here -->
+                </div>
+                
+                <div class="message-input-container">
+                    <input type="text" id="message-input" placeholder="Type a message...">
+                    <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            
+            <!-- Voice chat interface (hidden initially) -->
+            <div id="voice-interface" class="voice-interface hidden">
+                <div class="voice-header">
+                    <h3 id="current-voice-room-name">Voice General</h3>
+                </div>
+                
+                <div class="voice-users-container">
+                    <h4>Connected Users</h4>
+                    <ul id="voice-users-list" class="voice-users-list">
+                        <!-- Voice users will be displayed here -->
+                    </ul>
+                </div>
+                
+                <div class="voice-controls">
+                    <button id="mute-btn" class="voice-btn"><i class="fas fa-microphone"></i></button>
+                    <button id="leave-voice-btn" class="voice-btn leave-btn"><i class="fas fa-phone-slash"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Online users sidebar -->
+        <div class="users-sidebar">
+            <div class="users-header">
+                <h3>Online Users</h3>
+            </div>
+            <ul id="online-users-list" class="users-list">
+                <!-- Online users will be displayed here -->
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Modal for creating new channels -->
+    <div id="create-channel-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title">Create New Channel</h3>
+            <input type="text" id="channel-name-input" placeholder="Channel name">
+            <button id="create-channel-btn">Create Channel</button>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
